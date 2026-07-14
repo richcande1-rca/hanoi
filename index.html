@@ -23,9 +23,14 @@
         <h1>HANOI</h1>
       </div>
 
-      <button class="icon-button" id="resetButton" type="button" aria-label="Reset puzzle">
-        ↻
-      </button>
+      <div class="header-actions">
+        <button class="icon-button help-button" id="helpButton" type="button" aria-label="Show game rules">
+          ?
+        </button>
+        <button class="icon-button" id="resetButton" type="button" aria-label="Reset puzzle">
+          ↻
+        </button>
+      </div>
     </header>
 
     <section class="scorebar" aria-label="Game score">
@@ -73,6 +78,25 @@
       <p class="instruction" id="instruction">Tap a peg to lift its top disc.</p>
     </section>
   </main>
+
+  <dialog class="rules-dialog" id="rulesDialog">
+    <div class="rules-card">
+      <p class="eyebrow">TOWER OF</p>
+      <h2>HANOI</h2>
+
+      <p class="rules-goal">Move the entire tower to either empty peg.</p>
+      <p>Tap a peg to lift its top disc, then tap another peg to place it.</p>
+
+      <div class="rules-core">
+        <strong>Move one disc at a time.</strong>
+        <strong>Place it on an empty peg or a larger disc.</strong>
+        <strong>Never place a larger disc on a smaller one.</strong>
+      </div>
+
+      <p class="rules-note">There is no move limit. Fewest moves wins; time is only a bonus.</p>
+      <button id="beginButton" type="button">BEGIN</button>
+    </div>
+  </dialog>
 
   <dialog class="complete-dialog" id="completeDialog">
     <div class="complete-card">
