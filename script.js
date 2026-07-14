@@ -1,3 +1,6 @@
+const STARTING_DISCS = 3;
+const MAX_DISCS = 8;
+
 const stacks = [[], [], []];
 const stackElements = [
   document.querySelector("#stack0"),
@@ -10,8 +13,8 @@ const moveCountElement = document.querySelector("#moveCount");
 const minimumMovesElement = document.querySelector("#minimumMoves");
 const timeDisplayElement = document.querySelector("#timeDisplay");
 const instructionElement = document.querySelector("#instruction");
+const levelMarkElement = document.querySelector("#levelMark");
 const resetButton = document.querySelector("#resetButton");
-const discButtons = document.querySelector("#discButtons");
 
 const completeDialog = document.querySelector("#completeDialog");
 const resultTitle = document.querySelector("#resultTitle");
@@ -20,7 +23,8 @@ const resultTime = document.querySelector("#resultTime");
 const bestTime = document.querySelector("#bestTime");
 const playAgainButton = document.querySelector("#playAgainButton");
 
-let discCount = 3;
+let discCount = STARTING_DISCS;
+let nextDiscCount = STARTING_DISCS;
 let moves = 0;
 let selectedPeg = null;
 let startedAt = null;
@@ -43,9 +47,18 @@ function minimumMoves() {
   return (2 ** discCount) - 1;
 }
 
+function levelLabel() {
+  if (discCount === STARTING_DISCS) {
+    return `BEGINNER · ${discCount} DISCS`;
+  }
+
+  return `LEVEL ${discCount - 2} · ${discCount} DISCS`;
+}
+
 function startGame(count = discCount) {
   stopTimer();
-  discCount = count;
+  discCount = Math.max(STARTING_DISCS, Math.min(MAX_DISCS, count));
+  nextDiscCount = discCount;
   moves = 0;
   selectedPeg = null;
   startedAt = null;
@@ -65,9 +78,9 @@ function startGame(count = discCount) {
   timeDisplayElement.textContent = "0:00";
   instructionElement.textContent = "Tap a peg to lift its top disc.";
 
-  document.querySelectorAll("[data-discs]").forEach((button) => {
-    button.classList.toggle("active", Number(button.dataset.discs) === discCount);
-  });
+  if (levelMarkElement) {
+    levelMarkElement.textContent = levelLabel();
+  }
 
   render();
 }
@@ -211,6 +224,14 @@ function finishGame() {
     bestTime.textContent = "";
   }
 
+  if (discCount < MAX_DISCS) {
+    nextDiscCount = discCount + 1;
+    playAgainButton.textContent = `NEXT · ${nextDiscCount} DISCS`;
+  } else {
+    nextDiscCount = discCount;
+    playAgainButton.textContent = `AGAIN · ${discCount} DISCS`;
+  }
+
   window.setTimeout(() => completeDialog.showModal(), 430);
 }
 
@@ -246,15 +267,9 @@ pegZones.forEach((zone) => {
 
 resetButton.addEventListener("click", () => startGame());
 
-discButtons.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-discs]");
-  if (!button) return;
-  startGame(Number(button.dataset.discs));
-});
-
 playAgainButton.addEventListener("click", () => {
   completeDialog.close();
-  startGame();
+  startGame(nextDiscCount);
 });
 
 completeDialog.addEventListener("cancel", (event) => {
@@ -264,4 +279,4 @@ completeDialog.addEventListener("cancel", (event) => {
 });
 
 buildRain();
-startGame(3);
+startGame(STARTING_DISCS);
