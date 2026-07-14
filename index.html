@@ -7,6 +7,7 @@
   <title>Tower of Hanoi</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="polish.css" />
+  <link rel="stylesheet" href="mode.css" />
 </head>
 <body>
   <div class="sky" aria-hidden="true">
@@ -49,9 +50,11 @@
     </section>
 
     <p class="level-mark" id="levelMark">BEGINNER · 3 DISCS</p>
+    <div class="mode-strip"><a class="mode-link" href="bicolor.html">BICOLOR</a></div>
 
     <section class="board-wrap" aria-label="Tower of Hanoi puzzle">
       <div class="board-glow" aria-hidden="true"></div>
+      <p class="instruction" id="instruction">Tap a peg to lift its top disc.</p>
 
       <div class="board" id="board">
         <div class="surface-rain" id="surfaceRain" aria-hidden="true"></div>
@@ -74,8 +77,6 @@
           <span class="peg-reflection"></span>
         </button>
       </div>
-
-      <p class="instruction" id="instruction">Tap a peg to lift its top disc.</p>
     </section>
   </main>
 
