@@ -52,7 +52,7 @@
 
     <section class="board-wrap" aria-label="Bicolor Towers of Hanoi puzzle">
       <div class="board-glow" aria-hidden="true"></div>
-      <p class="instruction" id="instruction">Separate the two colors into complete towers.</p>
+      <p class="instruction" id="instruction">Separate the colors—and swap the largest discs.</p>
 
       <div class="board" id="board">
         <div class="surface-rain" id="surfaceRain" aria-hidden="true"></div>
@@ -90,10 +90,11 @@
         <strong>Move one top disc at a time.</strong>
         <strong>Place it on an empty peg, an equal-size disc, or a larger disc.</strong>
         <strong>Never place a larger disc on a smaller one.</strong>
-        <strong>The two largest discs must trade towers.</strong>
+        <strong>Finish with magenta on the left and cyan on the right.</strong>
+        <strong>The two largest discs must trade pegs.</strong>
       </div>
 
-      <p class="rules-note">Fewest moves wins; time is only a bonus.</p>
+      <p class="rules-note">Making the towers monochrome is only halfway if the largest discs have not swapped. Fewest moves wins; time is only a bonus.</p>
       <button id="beginButton" type="button">BEGIN</button>
     </div>
   </dialog>
@@ -113,6 +114,5 @@
   </dialog>
 
   <script src="bicolor.js"></script>
-  <script src="bicolor-layout.js"></script>
 </body>
 </html>
