@@ -261,6 +261,28 @@ function buildRain() {
   rain.appendChild(fragment);
 }
 
+function buildSurfaceRain() {
+  const surface = document.querySelector("#surfaceRain");
+  if (!surface) return;
+
+  const fragment = document.createDocumentFragment();
+  const amount = window.innerWidth < 650 ? 8 : 13;
+
+  for (let index = 0; index < amount; index += 1) {
+    const ripple = document.createElement("span");
+    ripple.className = "surface-ripple";
+    ripple.style.left = `${7 + Math.random() * 86}%`;
+    ripple.style.top = `${12 + Math.random() * 76}%`;
+    ripple.style.setProperty("--ripple-size", `${18 + Math.random() * 30}px`);
+    ripple.style.setProperty("--ripple-opacity", `${0.12 + Math.random() * 0.2}`);
+    ripple.style.setProperty("--ripple-speed", `${2.3 + Math.random() * 2.5}s`);
+    ripple.style.setProperty("--ripple-delay", `${-Math.random() * 5}s`);
+    fragment.appendChild(ripple);
+  }
+
+  surface.appendChild(fragment);
+}
+
 pegZones.forEach((zone) => {
   zone.addEventListener("click", () => handlePegTap(Number(zone.dataset.peg)));
 });
@@ -279,4 +301,5 @@ completeDialog.addEventListener("cancel", (event) => {
 });
 
 buildRain();
+buildSurfaceRain();
 startGame(STARTING_DISCS);
