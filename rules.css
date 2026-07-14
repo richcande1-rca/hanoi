@@ -1,0 +1,112 @@
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.help-button {
+  width: 40px;
+  height: 40px;
+  margin-top: 3px;
+  font-size: 1rem;
+  font-weight: 900;
+}
+
+.rules-dialog {
+  width: min(430px, calc(100% - 30px));
+  padding: 0;
+  border: 1px solid rgba(151, 233, 255, 0.3);
+  border-radius: 24px;
+  background: rgba(5, 6, 14, 0.95);
+  color: var(--text);
+  box-shadow:
+    0 0 65px rgba(54, 245, 255, 0.13),
+    0 30px 100px rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(18px);
+}
+
+.rules-dialog::backdrop {
+  background: rgba(0, 0, 8, 0.78);
+  backdrop-filter: blur(5px);
+}
+
+.rules-card {
+  padding: 31px 28px 27px;
+}
+
+.rules-card h2 {
+  margin: 4px 0 25px;
+  font-size: clamp(2rem, 10vw, 3.1rem);
+  line-height: 0.95;
+  letter-spacing: 0.12em;
+  text-shadow:
+    0 0 9px rgba(255, 255, 255, 0.3),
+    0 0 26px rgba(143, 93, 255, 0.34);
+}
+
+.rules-card p {
+  margin: 0 0 14px;
+  color: rgba(229, 246, 255, 0.69);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.rules-card .rules-goal {
+  color: var(--text);
+  font-size: 1.05rem;
+  font-weight: 750;
+}
+
+.rules-core {
+  margin: 22px 0;
+  padding: 16px 17px;
+  display: grid;
+  gap: 10px;
+  border: 1px solid rgba(151, 233, 255, 0.17);
+  border-radius: 15px;
+  background:
+    linear-gradient(180deg, rgba(21, 29, 50, 0.68), rgba(7, 9, 18, 0.72));
+  box-shadow: inset 0 0 24px rgba(54, 245, 255, 0.035);
+}
+
+.rules-core strong {
+  color: rgba(240, 252, 255, 0.9);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.rules-card .rules-note {
+  margin-bottom: 21px;
+  color: rgba(222, 244, 255, 0.52);
+  font-size: 0.76rem;
+  letter-spacing: 0.035em;
+}
+
+.rules-card button {
+  width: 100%;
+  min-height: 49px;
+  border: 1px solid rgba(54, 245, 255, 0.54);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(35, 117, 139, 0.44), rgba(11, 39, 51, 0.7));
+  color: var(--text);
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  cursor: pointer;
+  box-shadow: 0 0 22px rgba(54, 245, 255, 0.11);
+}
+
+.rules-card button:focus-visible,
+.header-actions .icon-button:focus-visible {
+  outline: 2px solid rgba(54, 245, 255, 0.62);
+  outline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+  .rules-card {
+    padding: 27px 22px 23px;
+  }
+
+  .rules-core {
+    margin: 18px 0;
+  }
+}
