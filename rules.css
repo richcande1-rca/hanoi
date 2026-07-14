@@ -12,6 +12,17 @@
   font-weight: 900;
 }
 
+.board-wrap .instruction {
+  order: -1;
+  min-height: 1.4em;
+  margin: 14px 0 11px;
+  color: rgba(235, 250, 255, 0.72);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(54, 245, 255, 0.16);
+}
+
 .rules-dialog {
   width: min(430px, calc(100% - 30px));
   padding: 0;
@@ -102,6 +113,11 @@
 }
 
 @media (max-width: 620px) {
+  .board-wrap .instruction {
+    margin-top: 10px;
+    margin-bottom: 8px;
+  }
+
   .rules-card {
     padding: 27px 22px 23px;
   }
