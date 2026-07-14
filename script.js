@@ -1,5 +1,11 @@
 const STARTING_DISCS = 3;
 const MAX_DISCS = 8;
+const RULES_SEEN_KEY = "hanoi-rules-seen-v1";
+
+const rulesStylesheet = document.createElement("link");
+rulesStylesheet.rel = "stylesheet";
+rulesStylesheet.href = "rules.css";
+document.head.appendChild(rulesStylesheet);
 
 const stacks = [[], [], []];
 const stackElements = [
@@ -14,8 +20,11 @@ const minimumMovesElement = document.querySelector("#minimumMoves");
 const timeDisplayElement = document.querySelector("#timeDisplay");
 const instructionElement = document.querySelector("#instruction");
 const levelMarkElement = document.querySelector("#levelMark");
+const helpButton = document.querySelector("#helpButton");
 const resetButton = document.querySelector("#resetButton");
 
+const rulesDialog = document.querySelector("#rulesDialog");
+const beginButton = document.querySelector("#beginButton");
 const completeDialog = document.querySelector("#completeDialog");
 const resultTitle = document.querySelector("#resultTitle");
 const resultMoves = document.querySelector("#resultMoves");
@@ -53,6 +62,35 @@ function levelLabel() {
   }
 
   return `LEVEL ${discCount - 2} · ${discCount} DISCS`;
+}
+
+function hasSeenRules() {
+  try {
+    return localStorage.getItem(RULES_SEEN_KEY) === "yes";
+  } catch {
+    return false;
+  }
+}
+
+function markRulesSeen() {
+  try {
+    localStorage.setItem(RULES_SEEN_KEY, "yes");
+  } catch {
+    // The game still works when browser storage is unavailable.
+  }
+}
+
+function openRules() {
+  if (rulesDialog && !rulesDialog.open) {
+    rulesDialog.showModal();
+  }
+}
+
+function closeRules() {
+  markRulesSeen();
+  if (rulesDialog?.open) {
+    rulesDialog.close();
+  }
 }
 
 function startGame(count = discCount) {
@@ -287,7 +325,13 @@ pegZones.forEach((zone) => {
   zone.addEventListener("click", () => handlePegTap(Number(zone.dataset.peg)));
 });
 
+helpButton?.addEventListener("click", openRules);
+beginButton?.addEventListener("click", closeRules);
 resetButton.addEventListener("click", () => startGame());
+
+rulesDialog?.addEventListener("cancel", () => {
+  markRulesSeen();
+});
 
 playAgainButton.addEventListener("click", () => {
   completeDialog.close();
@@ -303,3 +347,7 @@ completeDialog.addEventListener("cancel", (event) => {
 buildRain();
 buildSurfaceRain();
 startGame(STARTING_DISCS);
+
+if (!hasSeenRules()) {
+  window.setTimeout(openRules, 180);
+}
