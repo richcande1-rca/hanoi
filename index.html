@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05050a" />
+  <title>HANOI</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="sky" aria-hidden="true">
+    <div class="city-glow"></div>
+    <div class="rain" id="rain"></div>
+  </div>
+
+  <main class="game-shell">
+    <header class="game-header">
+      <div>
+        <p class="eyebrow">VIOLENTLY SIMPLE</p>
+        <h1>HANOI</h1>
+      </div>
+
+      <button class="icon-button" id="resetButton" type="button" aria-label="Reset puzzle">
+        ↻
+      </button>
+    </header>
+
+    <section class="scorebar" aria-label="Game score">
+      <div class="score">
+        <span class="score-label">MOVES</span>
+        <strong id="moveCount">0</strong>
+      </div>
+      <div class="score">
+        <span class="score-label">MIN</span>
+        <strong id="minimumMoves">7</strong>
+      </div>
+      <div class="score score-time">
+        <span class="score-label">TIME</span>
+        <strong id="timeDisplay">0:00</strong>
+      </div>
+    </section>
+
+    <section class="board-wrap" aria-label="Tower of Hanoi puzzle">
+      <div class="board-glow" aria-hidden="true"></div>
+
+      <div class="board" id="board">
+        <button class="peg-zone" data-peg="0" type="button" aria-label="Left peg">
+          <span class="peg"></span>
+          <span class="stack" id="stack0"></span>
+          <span class="peg-reflection"></span>
+        </button>
+
+        <button class="peg-zone" data-peg="1" type="button" aria-label="Middle peg">
+          <span class="peg"></span>
+          <span class="stack" id="stack1"></span>
+          <span class="peg-reflection"></span>
+        </button>
+
+        <button class="peg-zone" data-peg="2" type="button" aria-label="Right peg">
+          <span class="peg"></span>
+          <span class="stack" id="stack2"></span>
+          <span class="peg-reflection"></span>
+        </button>
+      </div>
+
+      <p class="instruction" id="instruction">Tap a peg to lift its top disc.</p>
+    </section>
+
+    <section class="difficulty" aria-label="Disc count">
+      <span>DISCS</span>
+      <div class="disc-buttons" id="discButtons">
+        <button type="button" data-discs="3" class="active">3</button>
+        <button type="button" data-discs="4">4</button>
+        <button type="button" data-discs="5">5</button>
+        <button type="button" data-discs="6">6</button>
+        <button type="button" data-discs="7">7</button>
+        <button type="button" data-discs="8">8</button>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="complete-dialog" id="completeDialog">
+    <div class="complete-card">
+      <p class="eyebrow">TOWER COMPLETE</p>
+      <h2 id="resultTitle">PERFECT</h2>
+      <p class="result-line">
+        <strong id="resultMoves">7 / 7</strong>
+        <span>MOVES</span>
+      </p>
+      <p class="result-time">Time <strong id="resultTime">0:00</strong></p>
+      <p class="best-time" id="bestTime"></p>
+      <button id="playAgainButton" type="button">AGAIN</button>
+    </div>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
