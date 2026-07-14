@@ -1,6 +1,6 @@
 const STARTING_PAIRS = 2;
 const MAX_PAIRS = 5;
-const RULES_SEEN_KEY = "hanoi-bicolor-rules-seen-v1";
+const RULES_SEEN_KEY = "hanoi-bicolor-rules-seen-v2";
 const MINIMUM_MOVES = {
   2: 10,
   3: 29,
@@ -120,13 +120,13 @@ function startGame(count = pairCount) {
     const rightColor = oppositeColor(leftColor);
 
     stacks[0].push({ size, color: leftColor, id: `${leftColor}-${size}` });
-    stacks[1].push({ size, color: rightColor, id: `${rightColor}-${size}` });
+    stacks[2].push({ size, color: rightColor, id: `${rightColor}-${size}` });
   }
 
   moveCountElement.textContent = "0";
   minimumMovesElement.textContent = String(minimumMoves());
   timeDisplayElement.textContent = "0:00";
-  instructionElement.textContent = "Separate the two colors into complete towers.";
+  instructionElement.textContent = "Separate the colors—and swap the largest discs.";
   levelMarkElement.textContent = levelLabel();
   render();
 }
@@ -211,21 +211,39 @@ function handlePegTap(destinationPeg) {
   selectedPeg = null;
   moves += 1;
   moveCountElement.textContent = String(moves);
-  setInstruction("Build one cyan tower and one magenta tower.");
   render();
 
   if (isComplete()) {
     finishGame();
+    return;
   }
+
+  if (isMonochromeWithoutSwap()) {
+    setInstruction("Monochrome—but the largest discs still need to trade towers.");
+    return;
+  }
+
+  setInstruction("Build magenta on the left and cyan on the right.");
+}
+
+function isFullColorTower(stack, color) {
+  if (stack.length !== pairCount) return false;
+  if (!stack.every((disc) => disc.color === color)) return false;
+
+  const sizes = stack.map((disc) => disc.size).sort((a, b) => a - b);
+  return sizes.every((size, index) => size === index + 1);
 }
 
 function isComplete() {
-  if (stacks[2].length !== 0) return false;
-  if (stacks[0].length !== pairCount || stacks[1].length !== pairCount) return false;
+  return stacks[1].length === 0
+    && isFullColorTower(stacks[0], "magenta")
+    && isFullColorTower(stacks[2], "cyan");
+}
 
-  const leftIsMagenta = stacks[0].every((disc) => disc.color === "magenta");
-  const rightIsCyan = stacks[1].every((disc) => disc.color === "cyan");
-  return leftIsMagenta && rightIsCyan;
+function isMonochromeWithoutSwap() {
+  return stacks[1].length === 0
+    && isFullColorTower(stacks[0], "cyan")
+    && isFullColorTower(stacks[2], "magenta");
 }
 
 function pulseInvalid(pegIndex) {
