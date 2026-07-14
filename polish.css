@@ -6,8 +6,13 @@
   outline: none;
   border-radius: 22px;
   box-shadow:
-    inset 0 0 0 1px rgba(54, 245, 255, 0.34),
-    inset 0 0 34px rgba(54, 245, 255, 0.06);
+    inset 0 0 0 1px rgba(54, 245, 255, 0.28),
+    inset 0 0 34px rgba(54, 245, 255, 0.05);
+}
+
+.game-header .eyebrow {
+  color: rgba(190, 244, 255, 0.72);
+  text-shadow: 0 0 10px rgba(54, 245, 255, 0.34);
 }
 
 .level-mark {
@@ -20,25 +25,252 @@
   text-transform: uppercase;
 }
 
+.mist {
+  position: absolute;
+  left: 50%;
+  width: min(900px, 120vw);
+  height: 24vh;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(30px);
+  opacity: 0.2;
+  transform: translateX(-50%);
+}
+
+.mist-one {
+  bottom: 8vh;
+  background:
+    radial-gradient(ellipse at 28% 70%, rgba(54, 245, 255, 0.23), transparent 34%),
+    radial-gradient(ellipse at 70% 66%, rgba(143, 93, 255, 0.2), transparent 38%);
+  animation: mistDriftOne 18s ease-in-out infinite alternate;
+}
+
+.mist-two {
+  bottom: -2vh;
+  background:
+    radial-gradient(ellipse at 35% 50%, rgba(37, 104, 128, 0.23), transparent 40%),
+    radial-gradient(ellipse at 78% 58%, rgba(129, 29, 112, 0.19), transparent 35%);
+  opacity: 0.16;
+  animation: mistDriftTwo 24s ease-in-out infinite alternate;
+}
+
+@keyframes mistDriftOne {
+  from {
+    transform: translateX(-53%) scaleX(0.95);
+  }
+  to {
+    transform: translateX(-47%) scaleX(1.05);
+  }
+}
+
+@keyframes mistDriftTwo {
+  from {
+    transform: translateX(-46%) scaleX(1.08);
+  }
+  to {
+    transform: translateX(-54%) scaleX(0.94);
+  }
+}
+
+.board {
+  overflow: hidden;
+}
+
 .board::before {
   content: "";
   position: absolute;
-  inset: 58% 4% 4%;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(112deg, transparent 18%, rgba(181, 241, 255, 0.045) 36%, transparent 52%),
+    radial-gradient(ellipse at 18% 78%, rgba(54, 245, 255, 0.11), transparent 25%),
+    radial-gradient(ellipse at 50% 78%, rgba(143, 93, 255, 0.1), transparent 25%),
+    radial-gradient(ellipse at 82% 78%, rgba(255, 63, 189, 0.09), transparent 25%);
+  pointer-events: none;
+  z-index: 0;
+  animation: wetSheen 12s ease-in-out infinite alternate;
+}
+
+.board::after {
+  z-index: 0;
+}
+
+@keyframes wetSheen {
+  from {
+    opacity: 0.72;
+    transform: translateX(-1.5%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(1.5%);
+  }
+}
+
+.peg-zone {
+  z-index: 2;
+}
+
+.peg-zone::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 1px;
+  width: clamp(56px, 8vw, 78px);
+  height: clamp(15px, 2.2vw, 21px);
+  transform: translateX(-50%);
+  border: 1px solid rgba(166, 235, 255, 0.16);
   border-radius: 50%;
   background:
-    radial-gradient(ellipse at 18% 40%, rgba(54, 245, 255, 0.1), transparent 25%),
-    radial-gradient(ellipse at 50% 40%, rgba(143, 93, 255, 0.09), transparent 25%),
-    radial-gradient(ellipse at 82% 40%, rgba(255, 63, 189, 0.08), transparent 25%);
-  filter: blur(8px);
-  pointer-events: none;
+    radial-gradient(ellipse at 50% 34%, rgba(194, 247, 255, 0.34), rgba(73, 120, 145, 0.22) 28%, rgba(5, 8, 17, 0.9) 72%),
+    linear-gradient(180deg, rgba(83, 112, 133, 0.35), rgba(3, 5, 12, 0.95));
+  box-shadow:
+    inset 0 2px 3px rgba(255, 255, 255, 0.12),
+    inset 0 -5px 8px rgba(0, 0, 0, 0.72),
+    0 0 13px rgba(54, 245, 255, 0.12),
+    0 6px 13px rgba(0, 0, 0, 0.55);
+}
+
+.peg {
+  width: clamp(10px, 1.45vw, 14px);
+  z-index: 2;
+  border: 1px solid rgba(208, 248, 255, 0.14);
+  background:
+    linear-gradient(90deg,
+      rgba(1, 3, 9, 0.98) 0%,
+      rgba(17, 45, 59, 0.95) 22%,
+      rgba(91, 205, 222, 0.7) 43%,
+      rgba(228, 253, 255, 0.88) 51%,
+      rgba(95, 73, 172, 0.58) 62%,
+      rgba(11, 15, 31, 0.96) 81%,
+      rgba(1, 2, 8, 1) 100%);
+  box-shadow:
+    inset 1px 0 2px rgba(255, 255, 255, 0.18),
+    inset -2px 0 3px rgba(0, 0, 0, 0.7),
+    0 0 8px rgba(54, 245, 255, 0.24),
+    0 0 18px rgba(143, 93, 255, 0.11);
+}
+
+.peg::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -3px;
+  width: 112%;
+  height: 7px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 42% 34%, rgba(232, 255, 255, 0.72), rgba(75, 130, 159, 0.42) 38%, rgba(3, 5, 12, 0.96) 78%);
+  box-shadow: 0 0 7px rgba(54, 245, 255, 0.18);
+}
+
+.peg::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -3px;
+  width: clamp(25px, 3.7vw, 36px);
+  height: clamp(8px, 1.1vw, 11px);
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 30%, rgba(168, 235, 247, 0.38), rgba(24, 42, 57, 0.72) 45%, rgba(2, 3, 9, 0.98) 80%);
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, 0.12),
+    0 0 9px rgba(54, 245, 255, 0.13);
+}
+
+.peg-zone.selected .peg {
+  box-shadow:
+    inset 1px 0 2px rgba(255, 255, 255, 0.22),
+    inset -2px 0 3px rgba(0, 0, 0, 0.65),
+    0 0 12px rgba(54, 245, 255, 0.6),
+    0 0 30px rgba(54, 245, 255, 0.2);
+}
+
+.stack {
+  z-index: 3;
 }
 
 .peg-reflection {
+  width: 58%;
+  height: 44px;
+  bottom: -39px;
+  background:
+    linear-gradient(180deg, rgba(117, 220, 236, 0.13), transparent 76%),
+    radial-gradient(ellipse at center, rgba(132, 91, 255, 0.15), transparent 68%);
+  filter: blur(4px);
   opacity: 1;
+}
+
+.surface-rain {
+  position: absolute;
+  left: 3%;
+  right: 3%;
+  bottom: 3%;
+  height: 43%;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.surface-ripple {
+  position: absolute;
+  width: var(--ripple-size);
+  height: calc(var(--ripple-size) * 0.34);
+  border: 1px solid rgba(178, 238, 255, var(--ripple-opacity));
+  border-radius: 50%;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.2);
+  box-shadow: 0 0 8px rgba(54, 245, 255, 0.07);
+  animation: surfaceRipple var(--ripple-speed) ease-out infinite;
+  animation-delay: var(--ripple-delay);
+}
+
+@keyframes surfaceRipple {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.16);
+  }
+  12% {
+    opacity: 0.9;
+  }
+  65% {
+    opacity: 0.18;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.7);
+  }
+}
+
+.rain-drop:nth-child(5n) {
+  filter: blur(0.35px);
+  opacity: 0.52;
+}
+
+.rain-drop:nth-child(9n) {
+  width: 2px;
+  opacity: 0.46;
 }
 
 @media (max-width: 620px) {
   .level-mark {
     margin-top: 12px;
+  }
+
+  .mist {
+    width: 150vw;
+    filter: blur(24px);
+  }
+
+  .peg-zone::before {
+    width: 54px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mist,
+  .surface-rain {
+    display: none;
   }
 }
