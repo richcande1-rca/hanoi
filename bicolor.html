@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#05050a" />
+  <title>Bicolor Hanoi</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="polish.css" />
+  <link rel="stylesheet" href="rules.css" />
+  <link rel="stylesheet" href="mode.css" />
+  <link rel="stylesheet" href="bicolor.css" />
+</head>
+<body class="bicolor-mode">
+  <div class="sky" aria-hidden="true">
+    <div class="city-glow"></div>
+    <div class="mist mist-one"></div>
+    <div class="mist mist-two"></div>
+    <div class="rain" id="rain"></div>
+  </div>
+
+  <main class="game-shell">
+    <header class="game-header">
+      <div>
+        <p class="eyebrow">BICOLOR TOWERS OF</p>
+        <h1>HANOI</h1>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-button help-button" id="helpButton" type="button" aria-label="Show bicolor game rules">?</button>
+        <button class="icon-button" id="resetButton" type="button" aria-label="Reset puzzle">↻</button>
+      </div>
+    </header>
+
+    <section class="scorebar" aria-label="Game score">
+      <div class="score">
+        <span class="score-label">MOVES</span>
+        <strong id="moveCount">0</strong>
+      </div>
+      <div class="score">
+        <span class="score-label">MIN</span>
+        <strong id="minimumMoves">10</strong>
+      </div>
+      <div class="score score-time">
+        <span class="score-label">TIME</span>
+        <strong id="timeDisplay">0:00</strong>
+      </div>
+    </section>
+
+    <p class="level-mark" id="levelMark">BEGINNER · 2 PAIRS</p>
+    <div class="mode-strip"><a class="mode-link" href="index.html">CLASSIC</a></div>
+
+    <section class="board-wrap" aria-label="Bicolor Towers of Hanoi puzzle">
+      <div class="board-glow" aria-hidden="true"></div>
+      <p class="instruction" id="instruction">Separate the two colors into complete towers.</p>
+
+      <div class="board" id="board">
+        <div class="surface-rain" id="surfaceRain" aria-hidden="true"></div>
+
+        <button class="peg-zone" data-peg="0" type="button" aria-label="Left peg">
+          <span class="peg"></span>
+          <span class="stack" id="stack0"></span>
+          <span class="peg-reflection"></span>
+        </button>
+
+        <button class="peg-zone" data-peg="1" type="button" aria-label="Middle peg">
+          <span class="peg"></span>
+          <span class="stack" id="stack1"></span>
+          <span class="peg-reflection"></span>
+        </button>
+
+        <button class="peg-zone" data-peg="2" type="button" aria-label="Right peg">
+          <span class="peg"></span>
+          <span class="stack" id="stack2"></span>
+          <span class="peg-reflection"></span>
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <dialog class="rules-dialog" id="rulesDialog">
+    <div class="rules-card">
+      <p class="eyebrow">BICOLOR TOWERS OF</p>
+      <h2>HANOI</h2>
+
+      <p class="rules-goal">Turn two alternating towers into two single-color towers.</p>
+      <p>Every size appears twice: one cyan disc and one magenta disc.</p>
+
+      <div class="rules-core">
+        <strong>Move one top disc at a time.</strong>
+        <strong>Place it on an empty peg, an equal-size disc, or a larger disc.</strong>
+        <strong>Never place a larger disc on a smaller one.</strong>
+        <strong>The two largest discs must trade towers.</strong>
+      </div>
+
+      <p class="rules-note">Fewest moves wins; time is only a bonus.</p>
+      <button id="beginButton" type="button">BEGIN</button>
+    </div>
+  </dialog>
+
+  <dialog class="complete-dialog" id="completeDialog">
+    <div class="complete-card">
+      <p class="eyebrow">COLORS SEPARATED</p>
+      <h2 id="resultTitle">PERFECT</h2>
+      <p class="result-line">
+        <strong id="resultMoves">10 / 10</strong>
+        <span>MOVES</span>
+      </p>
+      <p class="result-time">Time <strong id="resultTime">0:00</strong></p>
+      <p class="best-time" id="bestTime"></p>
+      <button id="playAgainButton" type="button">NEXT</button>
+    </div>
+  </dialog>
+
+  <script src="bicolor.js"></script>
+</body>
+</html>
