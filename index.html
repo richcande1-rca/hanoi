@@ -6,6 +6,7 @@
   <meta name="theme-color" content="#05050a" />
   <title>HANOI</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="polish.css" />
 </head>
 <body>
   <div class="sky" aria-hidden="true">
@@ -40,6 +41,8 @@
       </div>
     </section>
 
+    <p class="level-mark" id="levelMark">BEGINNER · 3 DISCS</p>
+
     <section class="board-wrap" aria-label="Tower of Hanoi puzzle">
       <div class="board-glow" aria-hidden="true"></div>
 
@@ -65,18 +68,6 @@
 
       <p class="instruction" id="instruction">Tap a peg to lift its top disc.</p>
     </section>
-
-    <section class="difficulty" aria-label="Disc count">
-      <span>DISCS</span>
-      <div class="disc-buttons" id="discButtons">
-        <button type="button" data-discs="3" class="active">3</button>
-        <button type="button" data-discs="4">4</button>
-        <button type="button" data-discs="5">5</button>
-        <button type="button" data-discs="6">6</button>
-        <button type="button" data-discs="7">7</button>
-        <button type="button" data-discs="8">8</button>
-      </div>
-    </section>
   </main>
 
   <dialog class="complete-dialog" id="completeDialog">
@@ -89,7 +80,7 @@
       </p>
       <p class="result-time">Time <strong id="resultTime">0:00</strong></p>
       <p class="best-time" id="bestTime"></p>
-      <button id="playAgainButton" type="button">AGAIN</button>
+      <button id="playAgainButton" type="button">NEXT</button>
     </div>
   </dialog>
 
