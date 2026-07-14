@@ -6,6 +6,12 @@ A neon-night Tower of Hanoi game.
 
 Move one disc at a time. Never place a larger disc on a smaller disc.
 
+## Progression
+
+The game begins with a three-disc beginner tower. Completing a tower adds one disc to the next tower, progressing through the eight-disc challenge.
+
+There is no level picker during play. The tower itself is the progression.
+
 ## Scoring
 
 Moves are the primary score. The mathematical minimum is `2^n - 1`.
