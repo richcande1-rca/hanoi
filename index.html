@@ -4,20 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="theme-color" content="#05050a" />
-  <title>HANOI</title>
+  <title>Tower of Hanoi</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="polish.css" />
 </head>
 <body>
   <div class="sky" aria-hidden="true">
     <div class="city-glow"></div>
+    <div class="mist mist-one"></div>
+    <div class="mist mist-two"></div>
     <div class="rain" id="rain"></div>
   </div>
 
   <main class="game-shell">
     <header class="game-header">
       <div>
-        <p class="eyebrow">VIOLENTLY SIMPLE</p>
+        <p class="eyebrow">TOWER OF</p>
         <h1>HANOI</h1>
       </div>
 
@@ -47,6 +49,8 @@
       <div class="board-glow" aria-hidden="true"></div>
 
       <div class="board" id="board">
+        <div class="surface-rain" id="surfaceRain" aria-hidden="true"></div>
+
         <button class="peg-zone" data-peg="0" type="button" aria-label="Left peg">
           <span class="peg"></span>
           <span class="stack" id="stack0"></span>
