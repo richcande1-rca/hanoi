@@ -26,11 +26,53 @@
 
   const completeCard = document.querySelector("#completeDialog .complete-card");
   const nextButton = document.querySelector("#playAgainButton");
+  const headerActions = document.querySelector(".header-actions");
 
-  if (!completeCard || !nextButton || typeof finishGame !== "function") return;
+  if (!completeCard || !nextButton || !headerActions || typeof finishGame !== "function") return;
 
   let currentScore = null;
   let submitted = false;
+  let paused = false;
+  let pausedHadStarted = false;
+  let pausedInstruction = "";
+
+  const boardButton = document.createElement("button");
+  boardButton.className = "utility-button board-button";
+  boardButton.type = "button";
+  boardButton.textContent = "BOARD";
+  boardButton.setAttribute("aria-label", "Open leaderboard");
+
+  const pauseButton = document.createElement("button");
+  pauseButton.className = "utility-button pause-button";
+  pauseButton.type = "button";
+  pauseButton.textContent = "PAUSE";
+  pauseButton.setAttribute("aria-label", "Pause timer and moves");
+  pauseButton.setAttribute("aria-pressed", "false");
+
+  headerActions.prepend(boardButton, pauseButton);
+
+  const leaderboardDialog = document.createElement("dialog");
+  leaderboardDialog.className = "leaderboard-dialog";
+  leaderboardDialog.innerHTML = `
+    <div class="leaderboard-card">
+      <div class="online-board-head">
+        <div>
+          <span class="online-board-kicker">ONLINE BOARD</span>
+          <strong id="leaderboardScope">CURRENT PUZZLE</strong>
+        </div>
+        <span class="online-board-order">MOVES · TIME</span>
+      </div>
+      <div class="online-board-wall leaderboard-wall" id="leaderboardWall" aria-live="polite">
+        <p class="online-board-empty">Calling the tower...</p>
+      </div>
+      <button id="leaderboardClose" type="button">CLOSE</button>
+    </div>
+  `;
+  document.body.appendChild(leaderboardDialog);
+
+  const leaderboardScope = leaderboardDialog.querySelector("#leaderboardScope");
+  const leaderboardWall = leaderboardDialog.querySelector("#leaderboardWall");
+  const leaderboardClose = leaderboardDialog.querySelector("#leaderboardClose");
 
   const board = document.createElement("section");
   board.className = "online-board";
@@ -86,6 +128,10 @@
     return size === 1 ? "DISC" : "DISCS";
   }
 
+  function scopeText(size) {
+    return `${MODE_LABELS[mode]} · ${size} ${sizeWord(size)}`;
+  }
+
   function formatBoardTime(timeMs) {
     const safeMs = Math.max(0, Number(timeMs) || 0);
     const totalTenths = Math.floor(safeMs / 100);
@@ -134,31 +180,29 @@
     return article;
   }
 
-  function renderEntries(entries) {
-    wallElement.replaceChildren();
+  function renderEntries(target, entries) {
+    target.replaceChildren();
 
     if (!Array.isArray(entries) || entries.length === 0) {
       const empty = document.createElement("p");
       empty.className = "online-board-empty";
       empty.textContent = "No scores yet. First place is sitting there unattended.";
-      wallElement.appendChild(empty);
+      target.appendChild(empty);
       return;
     }
 
     entries.slice(0, 20).forEach((entry, index) => {
-      wallElement.appendChild(makeEntry(entry, index + 1));
+      target.appendChild(makeEntry(entry, index + 1));
     });
   }
 
-  async function loadBoard() {
-    if (!currentScore) return;
-
-    wallElement.innerHTML = '<p class="online-board-empty">Calling the tower...</p>';
+  async function loadBoard(target, size) {
+    target.innerHTML = '<p class="online-board-empty">Calling the tower...</p>';
 
     try {
       const query = new URLSearchParams({
-        mode: currentScore.mode,
-        size: String(currentScore.size),
+        mode,
+        size: String(size),
       });
       const response = await fetch(`${API_URL}?${query}`);
       const data = await response.json();
@@ -167,9 +211,9 @@
         throw new Error(data.error || "Board unavailable.");
       }
 
-      renderEntries(data.entries);
+      renderEntries(target, data.entries);
     } catch {
-      wallElement.innerHTML = '<p class="online-board-empty">The online board is unavailable. The puzzle is not impressed.</p>';
+      target.innerHTML = '<p class="online-board-empty">The online board is unavailable. The puzzle is not impressed.</p>';
     }
   }
 
@@ -185,10 +229,77 @@
     submitButton.disabled = false;
     submitButton.textContent = "POST SCORE";
     messageInput.value = "";
-    scopeElement.textContent = `${MODE_LABELS[mode]} · ${currentScore.size} ${sizeWord(currentScore.size)}`;
+    scopeElement.textContent = scopeText(currentScore.size);
     setStatus("");
-    loadBoard();
+    loadBoard(wallElement, currentScore.size);
   }
+
+  function resetPauseState() {
+    paused = false;
+    pausedHadStarted = false;
+    pausedInstruction = "";
+    pauseButton.disabled = false;
+    pauseButton.textContent = "PAUSE";
+    pauseButton.setAttribute("aria-label", "Pause timer and moves");
+    pauseButton.setAttribute("aria-pressed", "false");
+  }
+
+  function pauseGame() {
+    if (paused || locked) return;
+
+    paused = true;
+    pausedHadStarted = startedAt !== null;
+    pausedInstruction = instructionElement.textContent;
+
+    if (pausedHadStarted) {
+      updateTimer();
+      stopTimer();
+    }
+
+    locked = true;
+    instructionElement.textContent = "Paused.";
+    pauseButton.textContent = "RESUME";
+    pauseButton.setAttribute("aria-label", "Resume timer and moves");
+    pauseButton.setAttribute("aria-pressed", "true");
+  }
+
+  function resumeGame() {
+    if (!paused) return;
+
+    paused = false;
+    locked = false;
+
+    if (pausedHadStarted) {
+      startedAt = performance.now() - elapsedMs;
+      timerId = window.setInterval(updateTimer, 200);
+    }
+
+    instructionElement.textContent = pausedInstruction || "Tap a peg to continue.";
+    pauseButton.textContent = "PAUSE";
+    pauseButton.setAttribute("aria-label", "Pause timer and moves");
+    pauseButton.setAttribute("aria-pressed", "false");
+  }
+
+  pauseButton.addEventListener("click", () => {
+    if (paused) {
+      resumeGame();
+    } else {
+      pauseGame();
+    }
+  });
+
+  boardButton.addEventListener("click", () => {
+    const size = currentSize();
+    leaderboardScope.textContent = scopeText(size);
+    loadBoard(leaderboardWall, size);
+    leaderboardDialog.showModal();
+  });
+
+  leaderboardClose.addEventListener("click", () => leaderboardDialog.close());
+
+  leaderboardDialog.addEventListener("cancel", () => {
+    leaderboardDialog.close();
+  });
 
   submitButton.addEventListener("click", async () => {
     if (!currentScore || submitted) return;
@@ -228,7 +339,7 @@
       submitted = true;
       submitButton.textContent = "POSTED";
       setStatus("Your score is on the board.", "success");
-      renderEntries(data.entries);
+      renderEntries(wallElement, data.entries);
     } catch {
       submitButton.disabled = false;
       submitButton.textContent = "TRY AGAIN";
@@ -236,9 +347,19 @@
     }
   });
 
+  const originalStartGame = startGame;
+  startGame = function startGameWithSharedControls(...args) {
+    resetPauseState();
+    return originalStartGame.apply(this, args);
+  };
+
   const originalFinishGame = finishGame;
   finishGame = function finishGameWithOnlineBoard(...args) {
     const result = originalFinishGame.apply(this, args);
+    paused = false;
+    pauseButton.disabled = true;
+    pauseButton.textContent = "PAUSE";
+    pauseButton.setAttribute("aria-pressed", "false");
     captureCompletedRun();
     return result;
   };
