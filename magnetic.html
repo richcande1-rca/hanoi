@@ -63,7 +63,7 @@
 
     <section class="board-wrap" aria-label="Magnetic Tower of Hanoi puzzle">
       <div class="board-glow" aria-hidden="true"></div>
-      <p class="instruction" id="instruction" aria-live="polite">Move the tower right. Every move flips a disc.</p>
+      <p class="instruction" id="instruction" aria-live="polite">Flip the entire tower to magenta on any peg.</p>
 
       <div class="board" id="board">
         <div class="surface-rain" id="surfaceRain" aria-hidden="true"></div>
@@ -94,7 +94,7 @@
       <p class="eyebrow">MAGNETIC TOWER OF</p>
       <h2>HANOI</h2>
 
-      <p class="rules-goal">Move the entire tower from the left peg to the right peg, ending with magenta faces up.</p>
+      <p class="rules-goal">Rebuild the entire tower on any peg with magenta faces up.</p>
       <p>Every disc has one cyan face and one magenta face.</p>
 
       <div class="rules-core">
@@ -105,7 +105,7 @@
         <strong>An empty peg accepts either face.</strong>
       </div>
 
-      <p class="rules-note">The tower begins cyan-side up and must finish magenta-side up. Fewest moves wins; time is only a bonus.</p>
+      <p class="rules-note">The tower begins cyan-side up and may finish on any peg, but every disc must be magenta-side up. Fewest moves wins; time is only a bonus.</p>
       <button id="beginButton" type="button">BEGIN</button>
     </div>
   </dialog>
@@ -125,5 +125,6 @@
   </dialog>
 
   <script src="magnetic.js"></script>
+  <script src="magnetic-goal.js"></script>
 </body>
 </html>
