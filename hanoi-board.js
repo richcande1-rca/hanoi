@@ -19,10 +19,12 @@
         ? "magnetic"
         : "classic";
 
-  const stylesheet = document.createElement("link");
-  stylesheet.rel = "stylesheet";
-  stylesheet.href = "hanoi-board.css";
-  document.head.appendChild(stylesheet);
+  ["hanoi-board.css", "hanoi-controls.css"].forEach((href) => {
+    const stylesheet = document.createElement("link");
+    stylesheet.rel = "stylesheet";
+    stylesheet.href = href;
+    document.head.appendChild(stylesheet);
+  });
 
   const completeCard = document.querySelector("#completeDialog .complete-card");
   const nextButton = document.querySelector("#playAgainButton");
