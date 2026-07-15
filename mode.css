@@ -1,6 +1,7 @@
 .mode-strip {
   display: flex;
   justify-content: center;
+  gap: 8px;
   margin: 10px auto 0;
 }
 
@@ -34,6 +35,12 @@
 
 @media (max-width: 620px) {
   .mode-strip {
+    gap: 6px;
     margin-top: 8px;
+  }
+
+  .mode-link {
+    padding-inline: 10px;
+    font-size: 0.56rem;
   }
 }
