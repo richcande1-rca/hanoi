@@ -41,8 +41,8 @@
   const boardButton = document.createElement("button");
   boardButton.className = "utility-button board-button";
   boardButton.type = "button";
-  boardButton.textContent = "BOARD";
-  boardButton.setAttribute("aria-label", "Open leaderboard");
+  boardButton.textContent = "COMMENTS";
+  boardButton.setAttribute("aria-label", "Open comments and scores");
 
   const pauseButton = document.createElement("button");
   pauseButton.className = "utility-button pause-button";
