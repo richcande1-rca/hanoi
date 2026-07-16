@@ -1,6 +1,8 @@
+const MIN_DISCS = 3;
 const STARTING_DISCS = 3;
 const MAX_DISCS = 8;
 const RULES_SEEN_KEY = "hanoi-rules-seen-v1";
+const DISC_COUNT_KEY = "hanoi-classic-starting-discs-v1";
 
 const rulesStylesheet = document.createElement("link");
 rulesStylesheet.rel = "stylesheet";
@@ -14,6 +16,7 @@ const stackElements = [
   document.querySelector("#stack2")
 ];
 const pegZones = [...document.querySelectorAll(".peg-zone")];
+const discOptionElements = [...document.querySelectorAll(".disc-option")];
 
 const moveCountElement = document.querySelector("#moveCount");
 const minimumMovesElement = document.querySelector("#minimumMoves");
@@ -32,8 +35,9 @@ const resultTime = document.querySelector("#resultTime");
 const bestTime = document.querySelector("#bestTime");
 const playAgainButton = document.querySelector("#playAgainButton");
 
-let discCount = STARTING_DISCS;
-let nextDiscCount = STARTING_DISCS;
+let startingDiscCount = readStartingDiscCount();
+let discCount = startingDiscCount;
+let nextDiscCount = startingDiscCount;
 let moves = 0;
 let selectedPeg = null;
 let startedAt = null;
@@ -62,6 +66,35 @@ function levelLabel() {
   }
 
   return `LEVEL ${discCount - 2} · ${discCount} DISCS`;
+}
+
+function readStartingDiscCount() {
+  try {
+    const stored = Number(localStorage.getItem(DISC_COUNT_KEY));
+    return Number.isInteger(stored) && stored >= MIN_DISCS && stored <= MAX_DISCS
+      ? stored
+      : STARTING_DISCS;
+  } catch {
+    return STARTING_DISCS;
+  }
+}
+
+function saveStartingDiscCount(count) {
+  startingDiscCount = count;
+  try {
+    localStorage.setItem(DISC_COUNT_KEY, String(count));
+  } catch {
+    // The picker still works when browser storage is unavailable.
+  }
+}
+
+function updateDiscPicker() {
+  discOptionElements.forEach((option) => {
+    const count = Number(option.dataset.discs);
+    const isActive = count === discCount;
+    option.classList.toggle("active", isActive);
+    option.setAttribute("aria-pressed", String(isActive));
+  });
 }
 
 function hasSeenRules() {
@@ -95,7 +128,7 @@ function closeRules() {
 
 function startGame(count = discCount) {
   stopTimer();
-  discCount = Math.max(STARTING_DISCS, Math.min(MAX_DISCS, count));
+  discCount = Math.max(MIN_DISCS, Math.min(MAX_DISCS, count));
   nextDiscCount = discCount;
   moves = 0;
   selectedPeg = null;
@@ -120,6 +153,7 @@ function startGame(count = discCount) {
     levelMarkElement.textContent = levelLabel();
   }
 
+  updateDiscPicker();
   render();
 }
 
@@ -325,6 +359,17 @@ pegZones.forEach((zone) => {
   zone.addEventListener("click", () => handlePegTap(Number(zone.dataset.peg)));
 });
 
+discOptionElements.forEach((option) => {
+  option.addEventListener("click", () => {
+    const count = Number(option.dataset.discs);
+    if (!Number.isInteger(count) || count < MIN_DISCS || count > MAX_DISCS) return;
+
+    saveStartingDiscCount(count);
+    if (completeDialog?.open) completeDialog.close();
+    startGame(count);
+  });
+});
+
 helpButton?.addEventListener("click", openRules);
 beginButton?.addEventListener("click", closeRules);
 resetButton.addEventListener("click", () => startGame());
@@ -346,7 +391,7 @@ completeDialog.addEventListener("cancel", (event) => {
 
 buildRain();
 buildSurfaceRain();
-startGame(STARTING_DISCS);
+startGame(startingDiscCount);
 
 if (!hasSeenRules()) {
   window.setTimeout(openRules, 180);
